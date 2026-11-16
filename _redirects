@@ -1,0 +1,8 @@
+/apple-device-management /mac-management 301
+/apple-device-management.html /mac-management 301
+/microsoft-intune /windows-management 301
+/microsoft-intune.html /windows-management 301
+/jamf-to-intune-migration-tool /uem-bridge 301
+/jamf-to-intune-migration-tool.html /uem-bridge 301
+/hybrid-to-entra-join-tool /uem-bridge-cloud-join 301
+/hybrid-to-entra-join-tool.html /uem-bridge-cloud-join 301
