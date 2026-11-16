@@ -125,30 +125,45 @@
     });
   });
 
-  // ---------- contact form. On the live site this posts to the form service and emails info@.
+  // ---------- contact form: sends structured enquiry to sales@uemtechnologies.com
   var form = document.getElementById('enquiry');
   if (form) {
     var status = document.getElementById('formStatus');
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       var name = document.getElementById('name').value.trim();
+      var company = document.getElementById('company').value.trim();
       var email = document.getElementById('email').value.trim();
+      var phone = document.getElementById('phone').value.trim();
+      var interest = document.getElementById('interest').value;
+      var devices = document.getElementById('devices').value;
+      var msg = document.getElementById('msg').value.trim();
+      var platforms = [].slice.call(form.querySelectorAll('input[name="platform"]:checked')).map(function (cb) { return cb.value; });
+
       status.classList.add('show');
       if (!name || !/^\S+@\S+\.\S+$/.test(email)) {
         status.classList.add('error');
         status.textContent = 'Add your name and a valid work email, then send again.';
         return;
       }
+
       status.classList.remove('error');
-      var company = (document.getElementById('company') || {}).value || '';
-      var phone = (document.getElementById('phone') || {}).value || '';
-      var interest = (document.getElementById('interest') || {}).value || '';
-      var devices = (document.getElementById('devices') || {}).value || '';
-      var msg = (document.getElementById('msg') || {}).value || '';
-      var subject = encodeURIComponent('Website Enquiry: ' + interest + (company ? ' (' + company + ')' : ''));
-      var body = encodeURIComponent('Name: ' + name + '\nCompany: ' + company + '\nEmail: ' + email + '\nPhone: ' + phone + '\nInterest: ' + interest + '\nDevices: ' + devices + '\n\nMessage:\n' + msg);
-      window.location.href = 'mailto:sales@uemtechnologies.com?cc=info@uemtechnologies.com&subject=' + subject + '&body=' + body;
-      status.innerHTML = 'Opening your email client to send to <b>sales@uemtechnologies.com</b> &amp; <b>info@uemtechnologies.com</b> — or <a href="https://wa.me/918175052104" target="_blank" rel="noopener noreferrer">chat with us on WhatsApp (+91 81750 52104)</a>.';
+      var subject = 'Website Enquiry: ' + interest + (company ? ' (' + company + ')' : ' (' + name + ')');
+      var bodyLines = [
+        'Name: ' + name,
+        'Company: ' + (company || 'Not specified'),
+        'Work Email: ' + email,
+        'Phone: ' + (phone || 'Not provided'),
+        'Interested In: ' + interest,
+        'Number of Devices: ' + devices,
+        'Platforms: ' + (platforms.length ? platforms.join(', ') : 'Not specified'),
+        '',
+        'Message:',
+        msg || '(No additional message)'
+      ];
+      var mailtoUrl = 'mailto:sales@uemtechnologies.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(bodyLines.join('\r\n'));
+      window.location.href = mailtoUrl;
+      status.textContent = 'Opening your email client addressed to sales@uemtechnologies.com. We reply within one business day.';
     });
   }
 })();
